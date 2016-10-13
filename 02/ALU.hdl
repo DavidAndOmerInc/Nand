@@ -45,28 +45,25 @@ CHIP ALU {
 	//zero x and y..
 	Mux16(a=x,b[0..15]=false,sel=zx,out=x0);
 	Mux16(a=y,b[0..15]=false,sel=zy,out=y0);
-	// negate x and y
-	//		negate X
+	// not x and y
+	//		not X
 	Not16(in=x0, out=notX);
-	Inc16(in=notX, out=negX);
-	// 		negate Y
+	// 		not Y
 	Not16(in=y0, out=notY);
-	Inc16(in=notY, out=negY);
 	// 		choose
-	Mux16(a=x0,b=negX,sel=nx,out=finalX);
-	Mux16(a=y0,b=negY,sel=ny,out=finalY);
+	Mux16(a=x0,b=notX,sel=nx,out=finalX);
+	Mux16(a=y0,b=notY,sel=ny,out=finalY);
 	
 	//compute + or &
 	Add16(a=finalX, b=finalY, out=addScore); // x + y
 	And16(a=finalX, b=finalY, out=andScore); // x & y
 	// choose and return
 	Mux16(a=andScore, b=addScore, sel=f, out=tempOut); // + ? &
-	//		negateOut
+	//		notOut
 	Not16(in=tempOut, out=notOut);
-	Inc16(in=notOut, out=negateOut);
 	
 	//		choose real or negated
-	Mux16(a=tempOut, b=negateOut, sel=no, out=out, out[0..7]=low, out[8..15]=high, out[15]=ng);
+	Mux16(a=tempOut, b=notOut, sel=no, out=out, out[0..7]=low, out[8..15]=high, out[15]=ng);
 	// set zr
 	Or8Way(in=low, out=zr1);
 	Or8Way(in=high, out=zr2);

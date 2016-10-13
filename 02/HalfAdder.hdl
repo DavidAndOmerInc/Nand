@@ -13,7 +13,6 @@ CHIP HalfAdder {
         carry;  // Left bit of a + b
 
     PARTS:
-    // Check if should deal with negative numbers
     Xor(a=a, b=b, out=sum);
     And(a=a, b=b, out=carry);
 }
