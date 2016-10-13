@@ -42,17 +42,16 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-	set zero %B0000000000000000;
 	//zero x and y..
 	Mux16(a=x,b[0..15]=false,sel=zx,out=x0);
 	Mux16(a=y,b[0..15]=false,sel=zy,out=y0);
 	// negate x and y
 	//		negate X
 	Not16(in=x0, out=notX);
-	Inc16(int=notX, out=negX);
+	Inc16(in=notX, out=negX);
 	// 		negate Y
 	Not16(in=y0, out=notY);
-	Inc16(int=notY, out=negY);
+	Inc16(in=notY, out=negY);
 	// 		choose
 	Mux16(a=x0,b=negX,sel=nx,out=finalX);
 	Mux16(a=y0,b=negY,sel=ny,out=finalY);
@@ -71,7 +70,8 @@ CHIP ALU {
 	// set zr
 	Or8Way(in=low, out=zr1);
 	Or8Way(in=high, out=zr2);
-	Or(a=zr1, b=zr2, out=zr);
+	Or(a=zr1, b=zr2, out=zrN);
+	Not(in=zrN, out=zr);
 	
 	
 }
