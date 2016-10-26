@@ -37,20 +37,46 @@ M = D
 		M = D
 		@P_TO_BLACK // Check which color we need (0 to white, -1 to black)
 		D;JNE // if Stroke is not empty stroke - go to P_TO_BLACK 
-			@P
+			@p
 			M = 0
 			@PRINT
 			0;JMP
 		(P_TO_BLACK)
-			@P
+			@p
 			M = -1
 			@PRINT
 			0;JMP
 			
+//(PRINT)
+//	@P
+//	D = M
+//	@R10
+//	M = D
+//	@INFINITE_LOOP
+//	0;JMP
 (PRINT)
-	@P
-	D = M
-	@R10
+	@24576
+	D = A
+	@length
 	M = D
-	@INFINITE_LOOP
-	0;JMP
+	@SCREEN
+	D = A
+	@addr
+	M = D
+	(LOOP)
+		@p
+		D = M
+		@addr
+		A = M
+		M = D
+
+		@addr
+		M = M +1
+		D = M
+
+		@length
+		D = M - D
+		@INFINITE_LOOP
+		D;JEQ
+		@LOOP
+		0;JMP
