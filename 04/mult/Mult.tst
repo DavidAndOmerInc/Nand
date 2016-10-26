@@ -72,3 +72,15 @@ repeat 210 {
 set RAM[0] 6,   // Restore arguments in case program used them as loop counter
 set RAM[1] 7,
 output;
+
+
+set PC 0,
+set RAM[0] -2,   // Set test arguments
+set RAM[1] -6,
+set RAM[2] -1;  // Ensure that program initialized product to 0
+repeat 150 {
+  ticktock;
+}
+set RAM[0] -2,   // Restore arguments in case program used them as loop counter
+set RAM[1] -6,
+output;
