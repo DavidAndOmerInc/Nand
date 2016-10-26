@@ -13,47 +13,44 @@
 
 // Put your code here.
 
-	@5 // array length
-	D=A;
-	@n
-	M=D;
-	@SCREEN // array start
-	D=A;
-	@array
-	M=D;
-	@i
-	M=0;
-(KEYBIND)
-	@KBD
-	D=M
-	@LOOP
-	D;JNE
-	@KEYBIND
+// Init last stroke variable
+@R0
+D = A
+@LAST_STROKE
+M = D
+
+// Infinite strokes check
+(INFINITE_LOOP)
+	// checking if the last keyboard stroke is changed
+	@KBD 
+	D = M
+	@LAST_STROKE
+	D = M - D
+	@CHANGE_P
+	D;JNE // if last stroke was changed go to (CHANGE_P)
+		@INFINITE_LOOP
+		0;JMP
+	(CHANGE_P)
+		@KBD // Saving last keyboard stroke
+		D = M
+		@LAST_STROKE
+		M = D
+		@P_TO_BLACK // Check which color we need (0 to white, -1 to black)
+		D;JNE // if Stroke is not empty stroke - go to P_TO_BLACK 
+			@P
+			M = 0
+			@PRINT
+			0;JMP
+		(P_TO_BLACK)
+			@P
+			M = -1
+			@PRINT
+			0;JMP
+			
+(PRINT)
+	@P
+	D = M
+	@R10
+	M = D
+	@INFINITE_LOOP
 	0;JMP
-	
-	
-(LOOP)
-	//if i == n goto end
-	@i
-	D=M;
-	@n
-	D=D-M;
-	@KEYBIND
-	D;JEQ
-	// MAKE YOUR LOOP THINGS HERE!
-	@array
-	D=M
-	@i
-	A=D+M
-	M=-1;
-	
-	@i
-	M=M+1;
-	
-	@LOOP
-	0;JMP
-	
-(END)
-	@END
-	0;JMP
-	
