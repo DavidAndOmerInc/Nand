@@ -6,7 +6,7 @@
 // Multiplies R0 and R1 and stores the result in R2.
 // (R0, R1, R2 refer to RAM[0], RAM[1], and RAM[2], respectively.)
 
-// Put your code here.
+// pre loop
 @0
 D = A
 @i
@@ -14,12 +14,27 @@ M = D
 @R2
 M = D
 
+@sign
+M = 0
+
+@R1
+D = M
+@LOOP
+D;JGE
+	@R1
+	D = M
+	M = -D
+	@sign
+	M = -1
+	@LOOP
+	0;JMP
+
 (LOOP)
 	@R1
 	D = M
 	@i
 	D = D - M
-	@INFINITE_LOOP
+	@SIGN_CHECK
 	D;JLE
 	@R0
 	D = M
@@ -33,6 +48,13 @@ M = D
 	0;JMP
 	
 	
+(SIGN_CHECK)
+	@sign
+	D = M
+	@INFINITE_LOOP
+	D;JEQ
+	@R2
+	M = -M
 
 (INFINITE_LOOP)
 	@INFINITE_LOOP
