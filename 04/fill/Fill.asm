@@ -25,16 +25,18 @@ M = D
 	@KBD 
 	D = M
 	@LAST_STROKE
-	D = M - D
+	D = M - D // if nothing changed D = 0
 	@CHANGE_P
 	D;JNE // if last stroke was changed go to (CHANGE_P)
 		@INFINITE_LOOP
 		0;JMP
 	(CHANGE_P)
-		@KBD // Saving last keyboard stroke
+		// Saving last keyboard stroke
+		@KBD 
 		D = M
 		@LAST_STROKE
 		M = D
+		
 		@P_TO_BLACK // Check which color we need (0 to white, -1 to black)
 		D;JNE // if Stroke is not empty stroke - go to P_TO_BLACK 
 			@p
@@ -46,14 +48,6 @@ M = D
 			M = -1
 			@PRINT
 			0;JMP
-			
-//(PRINT)
-//	@P
-//	D = M
-//	@R10
-//	M = D
-//	@INFINITE_LOOP
-//	0;JMP
 (PRINT)
 	@24576
 	D = A
