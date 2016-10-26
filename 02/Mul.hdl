@@ -1,0 +1,23 @@
+CHIP Mul{
+    IN a[16], b[16];
+    OUT out[16];
+
+    PARTS:
+		Mux16(a=a, b[0..15]=false, sel=b[0], out=o1);
+		ShiftRight(in=a, out=a1, out=a_1)
+		Mux16(a=a1, b[0..15]=false, sel=b[1], out=o1);
+		ShiftRight(in=a_1, out=a2, out=a_2)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		ShiftRight(in=a_1, out=a3, out=a_3)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		ShiftRight(in=a_1, out=a4, out=a_4)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		ShiftRight(in=a_1, out=a5, out=a_5)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		ShiftRight(in=a_1, out=a6, out=a_6)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		ShiftRight(in=a_1, out=a7, out=a_7)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		ShiftRight(in=a_1, out=a8, out=a_8)
+		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+}

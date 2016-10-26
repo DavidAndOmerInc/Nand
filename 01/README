@@ -1,0 +1,32 @@
+david, omer
+===============================================================================
+David Weis, ID 311511802, david.weis@mail.huji.ac.il
+Omer Shacham, ID 20403472, omer.shacham@mail.huji.ac.il 
+===============================================================================
+
+                           Project 1 - An HDL File
+                           ----------------------- 
+  
+
+Submitted Files
+---------------
+README - This file.
+And.hdl - And logic gate
+DMux.hdl - DMux logic gate
+DMux8Way.hdl - Dmux logic gate for 8 decisions
+Mux16.hdl - Mux logic gate for 16bit array
+Mux8Way16.hdl - Mux logic gate for 16bit 8 arrays
+Not16.hdl - Not logic gate for 16bits
+Or16.hdl - Or logic gate for 16 bits
+Xor.hdl - Xor logic gate
+And16.hdl - And logic gate for 16bits
+DMux4Way.hdl - Dmux4Way logic gate for 4 decisions
+Mux.hdl - Mux logic gate 
+Mux4Way16.hdl - Mux logic gate for 16bit 4 arrays
+Not.hdl - Not logic gate
+Or.hdl - Or logic gate 
+Or8Way.hdl - Or logic gate for 8 decisions
+
+Remarks
+-------
+* The chip was actually implemented by simply using an Nand chip. yep, that`s cool.
