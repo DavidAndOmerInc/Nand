@@ -11,7 +11,6 @@
 // "white" in every pixel;
 // the screen should remain fully clear as long as no key is pressed.
 
-// Put your code here.
 
 // Init last stroke variable
 @R0
@@ -47,16 +46,13 @@ M = D
 			@PRINT
 			0;JMP
 			
-//(PRINT)
-//	@P
-//	D = M
-//	@R10
-//	M = D
-//	@INFINITE_LOOP
-//	0;JMP
 (PRINT)
-	@24576
+	@8192
 	D = A
+	@SCREEN
+	D = D + M
+	//@24576
+	//D = A
 	@length
 	M = D
 	@SCREEN
