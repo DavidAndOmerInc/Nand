@@ -8,6 +8,12 @@ D = M
 M = D
 @toCompare
 M = 0
+@endArray
+M = D
+@cur
+D = M
+@endArray
+M = M + D
 
 
 (OUTSIDE_LOOP)
@@ -15,14 +21,16 @@ M = 0
 	D = M
 	@toCompare
 	M = D + 1
-	@R15
+	@endArray
 	D = D - M
+	//@R15
+	//D = D - M
 	@INFINITE_LOOP
 	D;JEQ
 	(INSIDE_LOOP)
 		@toCompare
 		D = M
-		@R15
+		@endArray
 		D = D - M
 		@TO_OUT_LOOP
 		D;JEQ
@@ -57,8 +65,8 @@ M = 0
 		@toCompare
 		M = M + 1
 		@INSIDE_LOOP
+		0;JMP
 		(TO_OUT_LOOP)
-			0;JMP
 			@cur
 			M = M + 1
 			@OUTSIDE_LOOP
