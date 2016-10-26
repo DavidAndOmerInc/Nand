@@ -3,21 +3,52 @@ CHIP Mul{
     OUT out[16];
 
     PARTS:
-		Mux16(a=a, b[0..15]=false, sel=b[0], out=o1);
-		ShiftRight(in=a, out=a1, out=a_1)
-		Mux16(a=a1, b[0..15]=false, sel=b[1], out=o1);
-		ShiftRight(in=a_1, out=a2, out=a_2)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
-		ShiftRight(in=a_1, out=a3, out=a_3)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
-		ShiftRight(in=a_1, out=a4, out=a_4)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
-		ShiftRight(in=a_1, out=a5, out=a_5)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
-		ShiftRight(in=a_1, out=a6, out=a_6)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
-		ShiftRight(in=a_1, out=a7, out=a_7)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
-		ShiftRight(in=a_1, out=a8, out=a_8)
-		Mux16(a=a2, b[0..15]=false, sel=b[1], out=o2);
+		Mux16(b=a, a[0..15]=false, sel=b[0], out=o1);
+		ShiftLeft(in=a, out=a1);
+		Mux16(b=a1, a[0..15]=false, sel=b[1], out=o2);
+		ShiftLeft(in=a1, out=a2);
+		Mux16(b=a2, a[0..15]=false, sel=b[2], out=o3);
+		ShiftLeft(in=a2, out=a3);
+		Mux16(b=a3, a[0..15]=false, sel=b[3], out=o4);
+		ShiftLeft(in=a3, out=a4);
+		Mux16(b=a4, a[0..15]=false, sel=b[4], out=o5);
+		ShiftLeft(in=a4, out=a5);
+		Mux16(b=a5, a[0..15]=false, sel=b[5], out=o6);
+		ShiftLeft(in=a5, out=a6);
+		Mux16(b=a6, a[0..15]=false, sel=b[6], out=o7);
+		ShiftLeft(in=a6, out=a7);
+		Mux16(b=a7, a[0..15]=false, sel=b[7], out=o8);
+		ShiftLeft(in=a7, out=a8);
+		Mux16(b=a8, a[0..15]=false, sel=b[8], out=o9);
+		ShiftLeft(in=a8, out=a9);
+		Mux16(b=a9, a[0..15]=false, sel=b[9], out=o10);
+		ShiftLeft(in=a9, out=a10);
+		Mux16(b=a10, a[0..15]=false, sel=b[10], out=o11);
+		ShiftLeft(in=a10, out=a11);
+		Mux16(b=a11, a[0..15]=false, sel=b[11], out=o12);
+		ShiftLeft(in=a11, out=a12);
+		Mux16(b=a12, a[0..15]=false, sel=b[12], out=o13);
+		ShiftLeft(in=a12, out=a13);
+		Mux16(b=a13, a[0..15]=false, sel=b[13], out=o14);
+		ShiftLeft(in=a13, out=a14);
+		Mux16(b=a14, a[0..15]=false, sel=b[14], out=o15);
+		ShiftLeft(in=a14, out=a15);
+		Mux16(b=a15, a[0..15]=false, sel=b[15], out=o16);
+		Add16(a=o1, b=o2, out=t1);
+		Add16(a=o3, b=o4, out=t2);
+		Add16(a=o5, b=o6, out=t3);
+		Add16(a=o7, b=o8, out=t4);
+		Add16(a=o9, b=o10, out=t5);
+		Add16(a=o11, b=o12, out=t6);
+		Add16(a=o13, b=o14, out=t7);
+		Add16(a=o15, b=o16, out=t8);
+		Add16(a=t1, b=t2, out=q1);
+		Add16(a=t3, b=t4, out=q2);
+		Add16(a=t5, b=t6, out=q3);
+		Add16(a=t7, b=t8, out=q4);
+		Add16(a=q1, b=q2, out=s1);
+		Add16(a=q3, b=q4, out=s2);
+		Add16(a=s1, b=s2, out=out);
+		
+		
 }
