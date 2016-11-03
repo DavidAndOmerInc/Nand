@@ -1,4 +1,4 @@
-// sort array that start at address that in R14, and his length is in R15.
+// Sort array that start at address that in R14, and his length is in R15.
 
 @tmp
 M=0
