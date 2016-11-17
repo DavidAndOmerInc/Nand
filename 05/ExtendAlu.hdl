@@ -14,7 +14,38 @@
 CHIP ExtendAlu{
      IN x[16],y[16],instruction[9];
      OUT out[16],zr,ng;
-     
      PARTS:
+	And(a=instruction[7], b=instruction[8], out=originalALU);
+	ALU(x=x, y=y, zx=instruction[5], nx=instruction[4], zy=instruction[3], ny=instruction[2], 
+		f=instruction[1], no=instruction[0], out=ORIGout, zr=Ozr, ng=Ong);
+	Mul(a=x, b=y, out=mulOut);
+	ShiftLeft(in=x, out=xleft);
+	ShiftRight(in=x, out=xright);
+	ShiftLeft(in=y, out=yleft);
+	ShiftRight(in=y, out=yright);
+	/**
+	* 	ins[4..5] 	00	10	01	11
+	*				y>>	y<<	x>>	x<<
+	**/
+	Mux4Way16(a=yright, c=yleft, b=xright, d=xleft, sel=instruction[4..5], out=shiftOut);
+     /** instr[7..8]	00		01		10		11
+	 *					x*y		x*y		Shift	ALU
+	 **/
+	Mux4Way16(a=mulOut, b=shiftOut, c=mulOut, d=ORIGout, sel=instruction[7..8],out[15]=ng, out[0..7]=high, out[8..15]=low, out=out);
+	Or8Way(in=high, out=zr1);
+	Or8Way(in=low, out=zr2);
+	Or(a=zr1, b=zr2, out=zrN);
+	Not(in=zrN, out=zr);
+	
+	
+	
+	
+	
+	
+
+	
+	
+	
+	 
         
 }
