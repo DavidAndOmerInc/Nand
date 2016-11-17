@@ -40,11 +40,13 @@ CHIP CPU {
 
     PARTS:
 	//writing into A
-    Mux16(a=ALUOutput1, b=instruction, sel=instruction[0], out=afterMux);
+    Mux16(a=ALUOutput, b=instruction, sel=instruction[0], out=afterMux);
 	
 	
 	//determine of writing into D, A, M
-	DMux8Way(in=true, sel=true, a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
+	//DMux8Way(in=true, sel=false, a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
+	And16(a=true, b=ALUOutput, out[10..12]=sel);
+	DMux8Way(in=true, sel=sel, a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
     //DMux8Way(in=true, sel[0]=ALUOutput1[10], sel[1]=ALUOutput1[11], sel[2]=ALUOutput1[12], a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
 	Or(a=write3, b=write4, out=DReg1);
 	Or(a=write7, b=write8, out=DReg2);
@@ -58,7 +60,7 @@ CHIP CPU {
 	
 	
 	
-	DRegister(in=ALUOutput1, load=DReg, out=dout);
+	DRegister(in=ALUOutput, load=DReg, out=dout);
 	ARegister(in=afterMux, load=AReg, out[1..15]=addressM, out=aout); // todo check that it not should be out[0..14]
 	
 	
@@ -69,7 +71,7 @@ CHIP CPU {
 	
 	ALU(x=dout, y=aluMux, zx=instruction[4], nx=instruction[5], zy=instruction[6], 
 	ny=instruction[7], f=instruction[8], no=instruction[9], out=ALUOutput, zr=zero, ng=negative);
-	DFF16(in=ALUOutput, out=ALUOutput1, out=outM);
+	And16(a=true, b=ALUOutput, out=outM);
 	
 	//determine if we want to jump or not
 	DMux8Way(in=true, sel=instruction[13..15], a=NOTJump, b=JGT, c=JEQ, d=JGE,e=JLT,f=JNE,g=JLE, h=JMP);
