@@ -30,50 +30,72 @@ CHIP CpuMul{
         pc[15];          // address of next instruction
 
      PARTS:
-	 //Set name conventions
-    And16(a=instruction, b=true, out[0]=j3, out[1]=j2, out[2]=j1,
-						   out[3]=d3, out[4]=d2, out[5]=d1,
-						   out[6]=c6, out[7]=c5, out[8]=c4, out[9]=c3, out[10]=c2, out[11]=c1,
-						   out[12]=ia, out[15]=aorc, out[0..14]=addressa);
-	DMux(in=true, sel=aorc, a=ainst, b=cinst);
+		//writing into A
+    Mux16(a=instruction, b=ALUOutput, sel=instruction[15], out=afterMux);
+    Not(in=instruction[15], out=changeA);
+	
+	
+	//determine of writing into D, A, M
+	And16(a=true, b=instruction, out[3..5]=sel);
+	DMux8Way(in=true, sel=sel, a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
+	Or(a=write3, b=write4, out=DReg1);
+	Or(a=write7, b=write8, out=DReg2);
+	Or(a=DReg1, b=DReg2, out=DRegPart);
+    And(a=DRegPart, b=instruction[15], out=DReg);
+	Or(a=write5, b=write6, out=AReg1);
+	Or(a=write8, b=write7, out=AReg2);
+	Or(a=AReg1, b=AReg2, out=ARegPart);
+    Or(a=ARegPart, b=changeA, out=AReg);
+	Or(a=write2, b=write4, out=MReg1);
+	Or(a=write6, b=write8, out=MReg2);
+	Or(a=MReg1, b=MReg2, out=writeM1);
+    And(a=writeM1, b=instruction[15], out=writeM);
+	
+	
+	
+	DRegister(in=ALUOutput, load=DReg, out=dout);
+	ARegister(in=afterMux, load=AReg, out[0..14]=addressM, out=aout); // todo check that it not should be out[0..14]
+	
+	
+    Mux16(a=aout, b=inM, sel=instruction[12], out=aluMux);
+	
+	
+	
+	
+	ExtendAlu(x=dout, y=aluMux, instruction=instruction[6..14], out=ALUOutput, zr=zero, ng=negative);
+	And16(a=true, b=ALUOutput, out=outM);
+	
+	//determine if we want to jump or not
+	DMux8Way(in=true, sel=instruction[0..2], a=NOTJump, b=JGT, c=JEQ, d=JGE,e=JLT,f=JNE,g=JLE, h=JMP);
     
-    //Set ARegister
-    And(a=cinst, b=d1, out=computetoa);
-    Mux16(a=instruction, b=alu, sel=computetoa, out=newa);
-    Or(a=ainst, b=computetoa, out=loada);
-    ARegister(in=newa, load=loada, out=aRegister);
-    
-    //Set DRegister
-    And(a=d2, b=cinst, out=loadd);
-    DRegister(in=alu, load=loadd, out=dRegister);
-    
-    //Set Mul 
-    Mul(a=dRegister, b=aorm, out=outMul);
-    
-    //Set
-    //Set ALU
-    Mux16(a=aRegister, b=inM, sel=ia, out=aorm);
-    ExtendAlu(x=dRegister, y=aorm, instruction=instruction[6..14], out=alu, zr=zr, ng=ng);
-    
-    //Set jump conditions
-    Not(in=zr, out=nzr);
-    Not(in=ng, out=nng);
-    And(a=nzr, b=nng, out=pos);
-    And(a=j1, b=ng, out=jlt);
-    And(a=j2, b=zr, out=jeq);
-    And(a=j3, b=pos, out=jgt);
-    Or(a=jlt, b=jeq, out=jle);
-    Or(a=jle, b=jgt, out=jmp);
-    And(a=cinst, b=jmp, out=shouldjmp);
-    
-    //OUTPUTS
-    
-    And16(a=alu, b=true, out=outM);
-    
-    And16(a=aRegister, b=true, out[0..14]=addressM);
-    
-    And(a=d3, b=cinst, out=writeM);
-    
-    PC(in=aRegister, load=shouldjmp, inc=true, reset=reset, out[0..14]=pc);
+    Not(in=zero, out=notZero);
+	
+	// Handle JGT
+    Not(in=negative, out=notNegative);
+	And(a=notZero, b=notNegative, out=jmp1);
+    And(a=JGT, b=jmp1, out=jump1);
+	
+	// Handle JGE
+	//Not(in=negative, out=positive);
+	//Or(a=positive, b=zero, out=jge2);
+	And(a=notNegative, b=JGE, out=jump2);
+	
+	// Handle JEQ
+	And(a=zero, b=JEQ, out=jump3);
+	
+	//Handle JLT
+	And(a=negative, b=JLT, out=jump4);
+	
+	//Handle JLE
+	Or(a=negative, b=zero, out=jle2);
+	And(a=jle2, b=JLE, out=jump5);
+	
+	// Handle JNE
+	And(a=notZero, b=JNE, out=jump6);
+	
+	//determine if we want to jump!
+	Or8Way(in[0]=jump1, in[1]=jump2, in[2]=jump3, in[3]=jump4, in[4]=jump5, in[5]=jump6, in[6]=JMP, in[7]=false, out=toJumpPart);
+    And(a=toJumpPart, b=instruction[15], out=toJump);
+	PC(in=aout, load=toJump, inc=true, reset=reset, out[0..14]=pc);
 	 
 }
