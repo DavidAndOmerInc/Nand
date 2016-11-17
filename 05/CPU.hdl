@@ -59,7 +59,7 @@ CHIP CPU {
 	
 	
 	DRegister(in=ALUOutput1, load=DReg, out=dout);
-	ARegister(in=afterMux, load=AReg, out[1..15]=addressM, out=pcA); // todo check that it not should be out[0..14]
+	ARegister(in=afterMux, load=AReg, out[1..15]=addressM, out=aout); // todo check that it not should be out[0..14]
 	
 	
     Mux16(a=aout, b=inM, sel=instruction[3], out=aluMux);
