@@ -39,5 +39,69 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+	//writing into A
+    Mux16(a=ALUOutput1, b=instruction, sel=instruction[0], out=afterMux);
+	
+	
+	//determine of writing into D, A, M
+	Dmux8way(in=true, sel=ALUOutput1[10..12], a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
+	Or(a=write3, b=write4, out=DReg1);
+	Or(a=write7, b=write8, out=DReg2);
+	Or(a=DReg1, b=DReg2, out=DReg);
+	Or(a=write5, b=write6, out=AReg1);
+	Or(a=write8, b=write7, out=AReg2);
+	Or(a=DReg1, b=AReg2, out=AReg);
+	Or(a=write2, b=write4, out=MReg1);
+	Or(a=write6, b=write8, out=MReg2);
+	Or(a=MReg1, b=MReg2, out=writeM);
+	
+	
+	
+	DRegister(in=ALUOutput1, load=DReg, out=dout);
+	ARegister(in=afterMux, load=AReg, out=addressM, out=pcA);
+	
+	
+	Mux16(a=aout, b=inM, sel=instruction[3], out=alu_mux);
+	
+	
+	
+	
+	ALU(x=dout, y=alu_mux, zx=instruction[4], nx=instruction[5], zy=instruction[6], 
+	ny=instruction[7], f=instruction[8], no=instruction[9], out=ALUOutput, zr=zero, ng=negative);
+	DFF(in=ALUOutput, out=ALUOutput1, out=outM);
+	
+	//determine if we want to jump or not
+	DMux8way(in=true, sel=instruction[13..15], a=NOTJump, b=JGT, c=JEQ, d=JGE,e=JLT,f=JNE,g=JLE, h=JMP);
+	
+	// Handle JGT
+	Nand(a=zero, b=negative, out=jump1);
+	
+	// Handle JGE
+	Not(in=negative, out=positive);
+	Or(a=positive, b=zero, out=jge2);
+	And(a=jge2, b=JGE, out=jump2);
+	
+	// Handle JEQ
+	And(a=zero, b=JEQ, out=jump3);
+	
+	//Handle JLT
+	And(a=negative, b=JLT, out=jump4);
+	
+	//Handle JLE
+	Or(a=negative, b=zero, out=jle2);
+	And(a=jle2, b=JLE, out=jump5);
+	
+	// Handle JNE
+	Not(in=zero, out=notZero);
+	And(a=notZero, b=JNE, out=jump6);
+	
+	//determine if we want to jump!
+	Or4Way(in[0]=jump1, in[1]=jump2, in[2]=jump3, in[3]=jump4, in[4]=jump5, in[5]=jump6, in[6]=JMP, in[7]=false, out=toJump);
+	PC(in=aout, load=toJump, inc=true, reset=reset, out[0..14]=pc)
+	
+	
+	
+	
+	
+	
 }
