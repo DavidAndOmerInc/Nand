@@ -25,7 +25,7 @@ M = M + D
 	D = D - M
 	//@R15
 	//D = D - M
-	@INFINITE_LOOP
+	@END
 	D;JEQ
 	(INSIDE_LOOP)
 		@toCompare
@@ -73,6 +73,5 @@ M = M + D
 			0;JMP
 
 
-(INFINITE_LOOP)
-	@INFINITE_LOOP
-	0;JMP
+(END)
+
