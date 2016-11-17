@@ -40,50 +40,55 @@ CHIP CPU {
 
     PARTS:
 	//writing into A
-    Mux16(a=ALUOutput, b=instruction, sel=instruction[0], out=afterMux);
+    Mux16(a=instruction, b=ALUOutput, sel=instruction[15], out=afterMux);
+    Not(in=instruction[15], out=changeA);
 	
 	
 	//determine of writing into D, A, M
-	//DMux8Way(in=true, sel=false, a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
-	And16(a=true, b=ALUOutput, out[10..12]=sel);
+	And16(a=true, b=instruction, out[3..5]=sel);
 	DMux8Way(in=true, sel=sel, a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
-    //DMux8Way(in=true, sel[0]=ALUOutput1[10], sel[1]=ALUOutput1[11], sel[2]=ALUOutput1[12], a=write1, b=write2, c=write3, d=write4, e=write5, f=write6, g=write7, h=write8);
 	Or(a=write3, b=write4, out=DReg1);
 	Or(a=write7, b=write8, out=DReg2);
-	Or(a=DReg1, b=DReg2, out=DReg);
+	Or(a=DReg1, b=DReg2, out=DRegPart);
+    And(a=DRegPart, b=instruction[15], out=DReg);
 	Or(a=write5, b=write6, out=AReg1);
 	Or(a=write8, b=write7, out=AReg2);
-	Or(a=DReg1, b=AReg2, out=AReg);
+	Or(a=AReg1, b=AReg2, out=ARegPart);
+    Or(a=ARegPart, b=changeA, out=AReg);
 	Or(a=write2, b=write4, out=MReg1);
 	Or(a=write6, b=write8, out=MReg2);
-	Or(a=MReg1, b=MReg2, out=writeM);
+	Or(a=MReg1, b=MReg2, out=writeM1);
+    And(a=writeM1, b=instruction[15], out=writeM);
 	
 	
 	
 	DRegister(in=ALUOutput, load=DReg, out=dout);
-	ARegister(in=afterMux, load=AReg, out[1..15]=addressM, out=aout); // todo check that it not should be out[0..14]
+	ARegister(in=afterMux, load=AReg, out[0..14]=addressM, out=aout); // todo check that it not should be out[0..14]
 	
 	
-    Mux16(a=aout, b=inM, sel=instruction[3], out=aluMux);
+    Mux16(a=aout, b=inM, sel=instruction[12], out=aluMux);
 	
 	
 	
 	
-	ALU(x=dout, y=aluMux, zx=instruction[4], nx=instruction[5], zy=instruction[6], 
-	ny=instruction[7], f=instruction[8], no=instruction[9], out=ALUOutput, zr=zero, ng=negative);
+	ALU(x=dout, y=aluMux, zx=instruction[11], nx=instruction[10], zy=instruction[9], 
+	ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUOutput, zr=zero, ng=negative);
 	And16(a=true, b=ALUOutput, out=outM);
 	
 	//determine if we want to jump or not
-	DMux8Way(in=true, sel=instruction[13..15], a=NOTJump, b=JGT, c=JEQ, d=JGE,e=JLT,f=JNE,g=JLE, h=JMP);
+	DMux8Way(in=true, sel=instruction[0..2], a=NOTJump, b=JGT, c=JEQ, d=JGE,e=JLT,f=JNE,g=JLE, h=JMP);
     
+    Not(in=zero, out=notZero);
 	
 	// Handle JGT
-	Nand(a=zero, b=negative, out=jump1);
+    Not(in=negative, out=notNegative);
+	And(a=notZero, b=notNegative, out=jmp1);
+    And(a=JGT, b=jmp1, out=jump1);
 	
 	// Handle JGE
-	Not(in=negative, out=positive);
-	Or(a=positive, b=zero, out=jge2);
-	And(a=jge2, b=JGE, out=jump2);
+	//Not(in=negative, out=positive);
+	//Or(a=positive, b=zero, out=jge2);
+	And(a=notNegative, b=JGE, out=jump2);
 	
 	// Handle JEQ
 	And(a=zero, b=JEQ, out=jump3);
@@ -96,11 +101,11 @@ CHIP CPU {
 	And(a=jle2, b=JLE, out=jump5);
 	
 	// Handle JNE
-	Not(in=zero, out=notZero);
 	And(a=notZero, b=JNE, out=jump6);
 	
 	//determine if we want to jump!
-	Or8Way(in[0]=jump1, in[1]=jump2, in[2]=jump3, in[3]=jump4, in[4]=jump5, in[5]=jump6, in[6]=JMP, in[7]=false, out=toJump);
+	Or8Way(in[0]=jump1, in[1]=jump2, in[2]=jump3, in[3]=jump4, in[4]=jump5, in[5]=jump6, in[6]=JMP, in[7]=false, out=toJumpPart);
+    And(a=toJumpPart, b=instruction[15], out=toJump);
 	PC(in=aout, load=toJump, inc=true, reset=reset, out[0..14]=pc);
 	
 }
