@@ -1,14 +1,14 @@
-// dividing 2 number using logarithmic algorithm
+// Dividing 2 number using logarithmic algorithm
 // https://www.youtube.com/watch?time_continue=389&v=S5tD47NZx7w on 06:30
 // using Divident and Divisor.
 
 
 // update some vars (after and before.)
-@R1
+@R13
 D = M
 @divident
 M = D
-@R2
+@R14
 D = M
 @divisor
 M = D
@@ -74,7 +74,7 @@ M = D
 (END)
 	@score
 	D = M
-	@R3
+	@R15
 	M = D
 	@END
 	0;JMP

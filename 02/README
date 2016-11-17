@@ -1,29 +1,21 @@
 david, omer
 ===============================================================================
-David Weis, ID 311511802, david.weis@mail.huji.ac.il
-Omer Shacham, ID 20403472, omer.shacham@mail.huji.ac.il 
+David Wies, ID 311511802, david.weis@mail.huji.ac.il
+Omer Shacham, ID 20403472, omer.shacham@mail.huji.ac.il
 ===============================================================================
 
                            Project 2 - An HDL Files
-                           ----------------------- 
-  
+                           -----------------------
+
 
 Submitted Files
----------------
-- A
-	- Bit.hdl
-	- PC.hdl
-	- RAM64.hdl
-	- RAM8.hdl
-	- Register.hdl
-
-- B
-	- RAM16K.hdl
-	- RAM4K.hdl
-	- RAM512.hdl
-
-
-
-Remarks
--------
-Nothing to remark! :()
+----------------
+README - This file.
+Inc16.hdl - Increase the given number by 1.
+Mul.hdl - Multiply a by b.
+FullAdder.hdl - Calculate the right bit of a + b + c, and the left bit of a + b + c.
+Add16.hdl - Adds two 16-bit values.
+ShiftLeft.hdl - Multiply the given number by 2.
+ShiftRight.hdl - Divide the given number by 2.
+ALU.hdl - Compute function, that depend on the input, on the two given numbers.
+HalfAdder.hdl - Calculate the right bit of a + b, and the left bit of a + b.
