@@ -47,17 +47,13 @@ M = D
 			M = -1
 			@PRINT
 			0;JMP
-<<<<<<< HEAD
-=======
-			
->>>>>>> refs/remotes/origin/master
 (PRINT)
 	@8192
 	D = A
 	@SCREEN
 	D = D + M
-	//@24576
-	//D = A
+	@24576
+	D = A
 	@length
 	M = D
 	@SCREEN
