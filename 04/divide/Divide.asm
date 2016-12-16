@@ -52,16 +52,16 @@ M = D
 		@quotient
 		M = M + D
 		@current_divisor
-		M<<;
+		M = M<<;
 		@current_quotient_base
-		M<<;
+		M = M<<;
 		@DIVIDE
 		0;JMP
 	(DIVIDE_ELSE)
 		@current_divisor
-		M>>
+		M = M>>
 		@current_quotient_base
-		M>>
+		M = M>>
 		@DIVIDE
 		0;JMP
 (SUCCESS)
@@ -76,7 +76,3 @@ M = D
 	D = M
 	@R15
 	M = D
-	@END
-	0;JMP
-
-

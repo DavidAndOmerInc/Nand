@@ -51,11 +51,9 @@ D;JGE
 (SIGN_CHECK)
 	@sign
 	D = M
-	@INFINITE_LOOP
+	@END
 	D;JEQ
 	@R2
 	M = -M
 
-(INFINITE_LOOP)
-	@INFINITE_LOOP
-	0;JMP
+(END)

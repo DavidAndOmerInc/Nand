@@ -17,14 +17,6 @@ D = M
 @endArray
 M = M + D
 
-//@R15
-//D = M
-//@END
-//D;JEQ // Jump if the array is empty.
-//@R1
-//D = D - 1
-//D;JEQ // Jump if the array contain only 1 value.
-
 (OUTSIDE_LOOP)
 	@cur
 	D = M
