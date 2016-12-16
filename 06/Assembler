@@ -1,0 +1,10 @@
+#!/bin/bash
+str=$0
+length=${#str}
+newDir=${str:0:length-9}
+if [ $newDir = "./" ]
+    then
+        python3 Main.py "$1"
+        exit 1
+fi
+python3 "$newDir"Main.py "$1"
