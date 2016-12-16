@@ -15,7 +15,9 @@ SECOND_FULL_NAME = "Omer Shacham"
 SECOND_ID = "20403472"
 SECOND_EMAIL = "omer.shacham@mail.huji.ac.il"
 
-ends = {'.asm', '.hdl'}  # Write the ends of the type of files that you want to submit here.
+ends = {'.py', '.jack'}  # Write the ends of the type of files that you want to submit here.
+
+submit = {'Assembler', 'Makefile'}
 
 dont_submit = {}  # Write the names of files you dont want to submit here.
 
@@ -36,7 +38,7 @@ def to_add(filename):
     for end_file in ends:
         if filename.endswith(end_file) and not dont_add(filename):
             return True
-    return False
+    return filename in submit
 
 
 def dont_add(filename):
