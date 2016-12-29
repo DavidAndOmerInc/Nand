@@ -17,7 +17,7 @@ SECOND_EMAIL = "omer.shacham@mail.huji.ac.il"
 
 ends = {'.py', '.jack'}  # Write the ends of the type of files that you want to submit here.
 
-submit = {'Assembler', 'Makefile'}
+submit = {'VMtranslator', 'Makefile'}
 
 dont_submit = {}  # Write the names of files you dont want to submit here.
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
             readme.write('===============================================================================' + '\n')
             readme.write(FIRST_FULL_NAME + ', ID ' + FIRST_ID + ', ' + FIRST_EMAIL + '\n')
         readme.write('===============================================================================' + '\n' + '\n')
-        readme.write('                           Project ' + ex_number + ' - An HDL File' + '\n')
+        readme.write('                           Project ' + ex_number + ' - An Python File' + '\n')
         readme.write('                           -----------------------\n\n\n')
         readme.write('Submitted Files\n---------------\n')
         readme.write('README - This file.\n')
